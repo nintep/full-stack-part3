@@ -1,0 +1,7 @@
+POST https://secret-woodland-01722.herokuapp.com/api/persons
+content-type: application/json
+
+{
+"name": "Nimi Niminen", 
+"number": "1234567890"
+}
