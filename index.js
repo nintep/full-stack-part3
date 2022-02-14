@@ -14,7 +14,7 @@ app.use(express.json())
 
 //app.use(morgan('tiny'))
 morgan.token('content', function (req, res) {
-  if (req.method === "POST") {
+  if (req.method === 'POST') {
     return JSON.stringify(req.body)
   }
 })
@@ -81,25 +81,24 @@ app.delete('/api/persons/:id', (request, response, next) => {
 app.post('/api/persons', (request, response, next) => {
   const body = request.body
 
-  if (!body.name || body.name == '') {
+  if (!body.name || body.name === '') {
     return response.status(400).json({
       error: 'Name missing'
     })
   }
 
-  if (!body.number || body.number == '') {
+  if (!body.number || body.number === '') {
     return response.status(400).json({
       error: 'Number missing'
     })
   }
 
-  /* Person.find({}).then(persons => {
-    if (persons.map(person => person.name).includes(body.name)) {
-      return response.status(400).json({
-        error: 'Name must be unique'
-      })
-    }
-  }) */
+  //check if name is already in phonebook?
+  /* if(*name exists*) {
+    return response.status(400).json({
+      error: 'Name must be unique'
+    })
+  } */
 
   const person = new Person({
     name: body.name,
@@ -109,22 +108,17 @@ app.post('/api/persons', (request, response, next) => {
 
   person.save().then(savedPerson => {
     response.json(savedPerson)
-    })
+  })
     .catch(error => next(error))
 })
 
 app.put('/api/persons/:id', (request, response, next) => {
   const { name, number } = request.body
 
-  /* const person = {
-    name: body.name,
-    number: body.number,
-  } */
-
   Person.findByIdAndUpdate(
-    request.params.id, 
+    request.params.id,
     { name, number },
-    { new: true, runValidators: true, context: 'query'}
+    { new: true, runValidators: true, context: 'query' }
   )
     .then(updatedPerson => {
       response.json(updatedPerson)
